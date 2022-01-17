@@ -219,15 +219,16 @@ module Apartment
       #   @return {String} raw SQL contaning only postgres schema dump
       #
       def pg_dump_schema
-        # Skip excluded tables? :/
-        # excluded_tables =
-        #   collect_table_names(Apartment.excluded_models)
-        #   .map! {|t| "-T #{t}"}
-        #   .join(' ')
+        # The `rails-on-services` version of apartment creates empty tables within the tenant's
+        # schema for all excluded tables. This creates unnecessary tables, but also errors out
+        # when attempting to create a table that uses types from PostGIS, such as geometry.
+        # Instead. we ignore all excluded tables
+        excluded_tables =
+          collect_table_names(Apartment.excluded_models)
+          .map! { |t| "-T #{t}" }
+          .join(' ')
 
-        # `pg_dump -s -x -O -n #{default_tenant} #{excluded_tables} #{dbname}`
-
-        with_pg_env { `pg_dump -s -x -O -n #{default_tenant} #{dbname}` }
+        with_pg_env { `pg_dump -s -x -O -n #{default_tenant} #{excluded_tables} #{dbname}` }
       end
 
       #   Dump data from schema_migrations table

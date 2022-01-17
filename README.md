@@ -4,6 +4,7 @@ and table creation differently.**
 Changes include:
 
 - Foreign keys reference the public schema instead of tenant's
+- Do not create tables for excluded models within a tenant's schema
 
 # Apartment
 
