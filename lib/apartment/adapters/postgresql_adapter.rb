@@ -198,6 +198,12 @@ module Apartment
       #
       def clone_pg_schema
         pg_schema_sql = patch_search_path(pg_dump_schema)
+
+        # The `rails-on-services` version of apartment assumes that all foreign keys will link to
+        # the tenant's schema instead of the public schema. For our use-case, we instead want all
+        # references to point to our public schema.
+        pg_schema_sql.gsub!(/REFERENCES ".+?"./, 'REFERENCES "public".')
+
         Apartment.connection.execute(pg_schema_sql)
       end
 

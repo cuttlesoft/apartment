@@ -1,3 +1,10 @@
+**This is a custom fork of https://github.com/rails-on-services/apartment to handle foreign keys
+and table creation differently.**
+
+Changes include:
+
+- Foreign keys reference the public schema instead of tenant's
+
 # Apartment
 
 [![Gem Version](https://badge.fury.io/rb/ros-apartment.svg)](https://badge.fury.io/rb/apartment)
