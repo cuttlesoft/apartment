@@ -203,6 +203,7 @@ module Apartment
         # the tenant's schema instead of the public schema. For our use-case, we instead want all
         # references to point to our public schema.
         pg_schema_sql.gsub!(/REFERENCES ".+?"./, 'REFERENCES "public".')
+        pg_schema_sql.gsub!(/DEFAULT .+?\.gen_random_uuid/, 'DEFAULT "public".gen_random_uuid')
 
         Apartment.connection.execute(pg_schema_sql)
       end
